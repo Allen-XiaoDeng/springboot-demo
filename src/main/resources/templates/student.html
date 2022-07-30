@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--/*@thymesVar id="title" type="templates"*/-->
+    <title th:text="${title}"></title>
+    <style>
+        .findOne{
+            width: 300px;
+            margin-top: 10px;
+        }
+        .addOne{
+            width:300px;
+            margin-top: 10px;
+        }
+        .all{
+            width: 400px;
+            margin-top: 10px;
+        }
+        .updateOne{
+            width:300px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>我爱学习！！</h1>
+    <h2 th:text="${title}">默认文本</h2>
+   <div class="findOne">
+       <form action="http://localhost:8080/findone" , method="get">
+           学生编号:<input type="text" name="studentNo"/><br/>
+           <input type="submit" value="查询">
+       </form>
+   </div>
+    <div class="addOne">
+        <form action="http://localhost:8080/add" ,  method="post">
+            <label for="studentNo">学生编号:</label>
+            <input id="studentNo" type="text" name="studentNo"/><br/>
+            <label for="studentName">学生姓名:</label>
+            <input id="studentName" type="text" name="studentName"/><br/>
+            <label for="studentAge">学生年龄:</label>
+            <input id="studentAge" type="text" name="studentAge"/><br/>
+            <label for="studentGender">学生性别:</label>
+            <input id="studentGender" type="text" name="studentGender"/><br/>
+            <input type="submit" value="添加">
+        </form>
+    </div>
+    <div class="all">
+        <table name = "studnetInfo">
+            <thead>学生信息</thead>
+            <tbody>
+            <tr>
+                <th>学生id</th>
+                <th>学生姓名</th>
+                <th>学生年龄</th>
+                <th>学生性别</th>
+            </tr>
+                <tr th:each="student: ${user}" >
+                <td th:text="${student.studentNo}"></td>
+                <td contenteditable="true" th:text="${student.studentName}"></td>
+                <td th:text="${student.studentAge}"></td>
+                <td th:text="${student.studentGender}"></td>
+                <td><a th:href="@{'http://localhost:8080/delete?studentNo='+${student.studentNo}}">删除</a></td>
+                <td><button th:data-t_id="${student.studentNo}"  th:data-t_name="${student.studentName}"
+                            th:data-t_age="${student.studentAge}"  th:data-t_gender="${student.studentGender}"
+                            th:onclick="updateStudent(this.getAttribute('data-t_id'),this.getAttribute('data-t_name'),this.getAttribute('data-t_age'),this.getAttribute('data-t_gender'))">修改</button></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="updateOne" id="update" >
+            <form action="http://localhost:8080/update" >
+                <label for="stuNo">学生编号:</label>
+                <input id="stuNo" type="text" name="studentNo" /><br/>
+                <label for="stuName">学生姓名:</label>
+                <input id="stuName" type="text" name="studentName"/><br/>
+                <label for="stuAge">学生年龄:</label>
+                <input id="stuAge" type="text" name="studentAge"/><br/>
+                <label for="stuGender">学生性别:</label>
+                <input id="stuGender" type="text" name="studentGender"/><br/>
+                <input type="submit" value="修改">
+            </form>
+        </div>
+    </div>
+    <script>
+        function updateStudent(id,name,age,gender) {
+            var div = document.getElementById('update');
+            var studentNo = document.getElementById("stuNo");
+            var studentName = document.getElementById("stuName");
+            var studentAge = document.getElementById("stuAge");
+            var studentGender = document.getElementById("stuGender");
+            div.style.display = "block";
+            // console.log(studentNo)
+            studentNo.value = id;
+            studentName.value = name;
+            studentAge.value = age;
+            studentGender.value = gender;
+        }
+
+        // function findAll() {
+        //     console.log("我要发送请求了");
+        //     var xhr = new XMLHttpRequest();
+        //     xhr.open("GET","http://localhost:8080/all",false);
+        //     xhr.onreadystatechange = function () {
+        //         if(xhr.readyState ==4&xhr.status==200){
+        //             // console.log(xhr.responseText);
+        //         }
+        //     }
+        //     xhr.send();
+        // }
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.UserMapper">
+<!--    查询所有的学生信息-->
+    <resultMap id="userMap" type="com.example.demo.entity.User">
+        <result column="STUDENT_NO" property="studentNo"/>
+        <result column="STUDENT_NAME" property="studentName"/>
+        <result column="STUDENT_AGE" property="studentAge"/>
+        <result column="STUDENT_GENDER" property="studentGender"/>
+    </resultMap>
+    <select id="findAllUser" resultMap="userMap">
+        select * from hand_student;
+    </select>
+<!--根据studentName查询学生信息-->
+    <resultMap id="nameMap" type="com.example.demo.entity.User">
+        <result column="STUDENT_NO" property="studentNo"/>
+        <result column="STUDENT_NAME" property="studentName"/>
+        <result column="STUDENT_AGE" property="studentAge"/>
+        <result column="STUDENT_GENDER" property="studentGender"/>
+    </resultMap>
+
+    <select id="findOne" resultMap="nameMap">
+        select * from hand_student
+         <where>
+             <if test="studentNo!=null and studentNo !='' ">
+                 and STUDENT_NO = #{studentNo}
+             </if>
+             <if test="studentName!=null and studentName!=''">
+                 and STUDENT_NAME=#{studentName}
+             </if>
+         </where>
+    </select>
+
+<!--    插入信息-->
+    <insert id="addUser" parameterType="com.example.demo.entity.User">
+        insert into hand_student (STUDENT_NO,STUDENT_NAME,STUDENT_AGE,STUDENT_GENDER)
+        values (#{studentNo},#{studentName},#{studentAge},#{studentGender});
+    </insert>
+<!--    更新信息-->
+    <update id="updateUser" parameterType="com.example.demo.entity.User">
+        update hand_student
+        set STUDENT_NAME = #{studentName},STUDENT_AGE=#{studentAge},STUDENT_GENDER=#{studentGender}
+        where STUDENT_NO = #{studentNo} and 1=1;
+    </update>
+<!--    根据studentNO删除学生信息-->
+    <delete id="deleteUser" parameterType="java.lang.String">
+        delete from hand_student
+        where STUDENT_NO = #{studentNo}
+        and 1=1;
+    </delete>
+</mapper>
